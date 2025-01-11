@@ -58,18 +58,20 @@ class LoginScreen extends StatelessWidget {
                 onPressed: () async {
                   String email = emailController.text;
                   String password = passwordController.text;
-                  User? user = await _authService.signInWithEmailAndPassword(
-                      email, password);
-                  if (user != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DashboardScreen()),
-                    );
-                  } else {
+                  try {
+                    User? user = await _authService.signInWithEmailAndPassword(
+                        email, password);
+                    if (user != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DashboardScreen()),
+                      );
+                    }
+                  } catch (e) {
                     // Show error message
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to sign in')),
+                      SnackBar(content: Text(e.toString())),
                     );
                   }
                 },
