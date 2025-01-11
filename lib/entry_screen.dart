@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EntryScreen extends StatefulWidget {
   const EntryScreen({super.key});
@@ -15,9 +16,13 @@ class _EntryScreenState extends State<EntryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    entryType = AppLocalizations.of(context)!.income;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Entry'),
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(AppLocalizations.of(context)!.add_entry),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -31,8 +36,10 @@ class _EntryScreenState extends State<EntryScreen> {
                   entryType = newValue!;
                 });
               },
-              items: <String>['Income', 'Expense']
-                  .map<DropdownMenuItem<String>>((String value) {
+              items: <String>[
+                AppLocalizations.of(context)!.income,
+                AppLocalizations.of(context)!.expenses
+              ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -43,7 +50,7 @@ class _EntryScreenState extends State<EntryScreen> {
             TextField(
               controller: amountController,
               decoration: InputDecoration(
-                labelText: 'Amount',
+                labelText: AppLocalizations.of(context)!.amount,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -56,7 +63,7 @@ class _EntryScreenState extends State<EntryScreen> {
             TextField(
               controller: descriptionController,
               decoration: InputDecoration(
-                labelText: 'Description',
+                labelText: AppLocalizations.of(context)!.description,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -81,7 +88,7 @@ class _EntryScreenState extends State<EntryScreen> {
                   elevation: 5,
                 ),
                 child: Text(
-                  'Add Entry',
+                  AppLocalizations.of(context)!.add_entry_button,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,

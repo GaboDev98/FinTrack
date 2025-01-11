@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'full_transactions_screen.dart';
 import 'detail_transaction_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -20,7 +21,7 @@ class DashboardScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Dashboard'),
+          title: Text(AppLocalizations.of(context)!.financial_summary),
         ),
         endDrawer: Drawer(
           child: ListView(
@@ -31,7 +32,7 @@ class DashboardScreen extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 child: Text(
-                  'Menu',
+                  AppLocalizations.of(context)!.menu,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -40,7 +41,7 @@ class DashboardScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.person),
-                title: Text('Profile'),
+                title: Text(AppLocalizations.of(context)!.profile),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -50,7 +51,7 @@ class DashboardScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.list),
-                title: Text('Transactions'),
+                title: Text(AppLocalizations.of(context)!.transactions),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -61,7 +62,7 @@ class DashboardScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.logout),
-                title: Text('Logout'),
+                title: Text(AppLocalizations.of(context)!.logout),
                 onTap: () async {
                   await FirebaseAuth.instance.signOut();
                   Navigator.pushAndRemoveUntil(
@@ -80,7 +81,7 @@ class DashboardScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Financial Summary',
+                AppLocalizations.of(context)!.financial_summary,
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -99,19 +100,20 @@ class DashboardScreen extends StatelessWidget {
                       ListTile(
                         leading: Icon(Icons.account_balance_wallet,
                             color: Colors.blueAccent),
-                        title: Text('Total Balance'),
+                        title:
+                            Text(AppLocalizations.of(context)!.total_balance),
                         subtitle: Text('\$12,345.67'),
                       ),
                       Divider(),
                       ListTile(
                         leading: Icon(Icons.arrow_upward, color: Colors.green),
-                        title: Text('Income'),
+                        title: Text(AppLocalizations.of(context)!.income),
                         subtitle: Text('\$5,000.00'),
                       ),
                       Divider(),
                       ListTile(
                         leading: Icon(Icons.arrow_downward, color: Colors.red),
-                        title: Text('Expenses'),
+                        title: Text(AppLocalizations.of(context)!.expenses),
                         subtitle: Text('\$2,500.00'),
                       ),
                     ],
@@ -120,7 +122,7 @@ class DashboardScreen extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               Text(
-                'Recent Transactions',
+                AppLocalizations.of(context)!.recent_transactions,
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
@@ -133,7 +135,7 @@ class DashboardScreen extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.shopping_cart, color: Colors.orange),
-                    title: Text('Grocery Shopping'),
+                    title: Text(AppLocalizations.of(context)!.grocery_shopping),
                     subtitle: Text('\$150.00'),
                     trailing: Text('Oct 1, 2023'),
                     onTap: () {
@@ -141,7 +143,8 @@ class DashboardScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetailTransactionScreen(
-                            title: 'Grocery Shopping',
+                            title:
+                                AppLocalizations.of(context)!.grocery_shopping,
                             amount: '\$150.00',
                             date: 'Oct 1, 2023',
                             description:
@@ -154,7 +157,7 @@ class DashboardScreen extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.local_gas_station, color: Colors.blue),
-                    title: Text('Gas Station'),
+                    title: Text(AppLocalizations.of(context)!.gas_station),
                     subtitle: Text('\$60.00'),
                     trailing: Text('Oct 2, 2023'),
                     onTap: () {
@@ -162,7 +165,7 @@ class DashboardScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetailTransactionScreen(
-                            title: 'Gas Station',
+                            title: AppLocalizations.of(context)!.gas_station,
                             amount: '\$60.00',
                             date: 'Oct 2, 2023',
                             description: 'Fuel for the car.',
@@ -174,7 +177,7 @@ class DashboardScreen extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.restaurant, color: Colors.purple),
-                    title: Text('Restaurant'),
+                    title: Text(AppLocalizations.of(context)!.restaurant),
                     subtitle: Text('\$80.00'),
                     trailing: Text('Oct 3, 2023'),
                     onTap: () {
@@ -182,7 +185,7 @@ class DashboardScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetailTransactionScreen(
-                            title: 'Restaurant',
+                            title: AppLocalizations.of(context)!.restaurant,
                             amount: '\$80.00',
                             date: 'Oct 3, 2023',
                             description: 'Dinner at a restaurant.',
@@ -207,7 +210,8 @@ class DashboardScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Text('View All Transactions'),
+                    child: Text(
+                        AppLocalizations.of(context)!.view_all_transactions),
                   ),
                 ),
               ),

@@ -3,6 +3,7 @@ import 'dashboard_screen.dart';
 import 'registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -22,7 +23,7 @@ class LoginScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Welcome to FinTrack',
+                AppLocalizations.of(context)!.welcome,
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -33,7 +34,7 @@ class LoginScreen extends StatelessWidget {
               TextField(
                 controller: emailController,
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: AppLocalizations.of(context)!.email,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
@@ -45,7 +46,7 @@ class LoginScreen extends StatelessWidget {
               TextField(
                 controller: passwordController,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: AppLocalizations.of(context)!.password,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
@@ -86,7 +87,7 @@ class LoginScreen extends StatelessWidget {
                   elevation: 5,
                 ),
                 child: Text(
-                  'Login',
+                  AppLocalizations.of(context)!.login,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -103,7 +104,7 @@ class LoginScreen extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  'Register',
+                  AppLocalizations.of(context)!.register,
                   style: TextStyle(
                     fontSize: 16.0,
                     color: Theme.of(context).colorScheme.secondary,

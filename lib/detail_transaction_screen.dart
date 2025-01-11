@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailTransactionScreen extends StatelessWidget {
   final String title;
@@ -19,20 +20,20 @@ class DetailTransactionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Icon(transactionIcon, size: 30.0, color: Colors.white),
-            SizedBox(width: 10.0),
-            Text(title),
-          ],
-        ),
-      ),
+      appBar: AppBar(title: Text(title)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Center(
+              child: Icon(
+                transactionIcon,
+                size: 64.0,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            SizedBox(height: 16.0),
             Card(
               elevation: 5,
               shape: RoundedRectangleBorder(
@@ -45,19 +46,19 @@ class DetailTransactionScreen extends StatelessWidget {
                   children: <Widget>[
                     ListTile(
                       leading: Icon(Icons.monetization_on, color: Colors.green),
-                      title: Text('Amount'),
+                      title: Text(AppLocalizations.of(context)!.amount),
                       subtitle: Text(amount),
                     ),
                     Divider(),
                     ListTile(
                       leading: Icon(Icons.calendar_today, color: Colors.blue),
-                      title: Text('Date'),
+                      title: Text(AppLocalizations.of(context)!.date),
                       subtitle: Text(date),
                     ),
                     Divider(),
                     ListTile(
                       leading: Icon(Icons.description, color: Colors.grey),
-                      title: Text('Description'),
+                      title: Text(AppLocalizations.of(context)!.description),
                       subtitle: Text(description),
                     ),
                   ],
