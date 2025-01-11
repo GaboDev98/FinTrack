@@ -7,7 +7,8 @@ class DetailTransactionScreen extends StatelessWidget {
   final String description;
   final IconData transactionIcon;
 
-  DetailTransactionScreen({
+  const DetailTransactionScreen({
+    super.key,
     required this.title,
     required this.amount,
     required this.date,
