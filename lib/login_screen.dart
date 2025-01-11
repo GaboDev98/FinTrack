@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
                 ),
               ),
               SizedBox(height: 32.0),
@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).cardColor,
                 ),
               ),
               SizedBox(height: 16.0),
@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).cardColor,
                 ),
                 obscureText: true,
               ),
@@ -80,8 +80,9 @@ class LoginScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
-                  backgroundColor: Colors.blueAccent,
-                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context)
+                      .primaryColor, // Explicitly set background color
+                  foregroundColor: Colors.white, // Explicitly set text color
                   elevation: 5,
                 ),
                 child: Text(
