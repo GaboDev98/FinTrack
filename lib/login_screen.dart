@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
+import 'auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +30,7 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 32.0),
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(
@@ -35,6 +42,7 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               TextField(
+                controller: passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(
@@ -47,12 +55,23 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 32.0),
               ElevatedButton(
-                onPressed: () {
-                  // Navigate to the dashboard screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DashboardScreen()),
-                  );
+                onPressed: () async {
+                  String email = emailController.text;
+                  String password = passwordController.text;
+                  User? user = await _authService.signInWithEmailAndPassword(
+                      email, password);
+                  if (user != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DashboardScreen()),
+                    );
+                  } else {
+                    // Show error message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to sign in')),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
