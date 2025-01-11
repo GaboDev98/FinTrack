@@ -11,9 +11,19 @@ class AuthService {
           email: email, password: password);
       User? user = result.user;
       return user;
+    } on FirebaseAuthException catch (e) {
+      // Handle specific FirebaseAuth exceptions
+      switch (e.code) {
+        case 'user-not-found':
+          throw Exception('No user found for that email.');
+        case 'wrong-password':
+          throw Exception('Wrong password provided.');
+        default:
+          throw Exception('An unexpected error occurred: ${e.message}');
+      }
     } catch (e) {
-      print(e.toString());
-      return null;
+      // Handle any other exceptions
+      throw Exception('An unexpected error occurred: $e');
     }
   }
 
