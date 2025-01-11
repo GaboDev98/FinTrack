@@ -1,20 +1,20 @@
 import 'auth_service.dart';
-import 'dashboard_screen.dart';
-import 'registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegistrationScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final AuthService _authService = AuthService();
 
-  LoginScreen({super.key});
+  RegistrationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text('Register'),
+      ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Welcome to FinTrack',
+                'Create a New Account',
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -60,14 +60,10 @@ class LoginScreen extends StatelessWidget {
                   String email = emailController.text;
                   String password = passwordController.text;
                   try {
-                    User? user = await _authService.signInWithEmailAndPassword(
-                        email, password);
+                    User? user = await _authService
+                        .registerWithEmailAndPassword(email, password);
                     if (user != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DashboardScreen()),
-                      );
+                      Navigator.pop(context);
                     }
                   } catch (e) {
                     // Show error message
@@ -86,27 +82,10 @@ class LoginScreen extends StatelessWidget {
                   elevation: 5,
                 ),
                 child: Text(
-                  'Login',
+                  'Register',
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RegistrationScreen()),
-                  );
-                },
-                child: Text(
-                  'Register',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
               ),

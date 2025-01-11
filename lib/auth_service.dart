@@ -27,6 +27,30 @@ class AuthService {
     }
   }
 
+  // Register with email and password
+  Future<User?> registerWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      return user;
+    } on FirebaseAuthException catch (e) {
+      // Handle specific FirebaseAuth exceptions
+      switch (e.code) {
+        case 'email-already-in-use':
+          throw Exception('The email address is already in use.');
+        case 'weak-password':
+          throw Exception('The password provided is too weak.');
+        default:
+          throw Exception('An unexpected error occurred: ${e.message}');
+      }
+    } catch (e) {
+      // Handle any other exceptions
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
   // Sign out
   Future<void> signOut() async {
     try {
