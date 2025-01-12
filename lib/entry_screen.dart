@@ -1,14 +1,13 @@
-import 'package:fintrack/dashboard_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EntryScreen extends StatefulWidget {
   const EntryScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _EntryScreenState createState() => _EntryScreenState();
 }
 
@@ -124,10 +123,7 @@ class _EntryScreenState extends State<EntryScreen> {
       };
 
       _database.child('entries').push().set(entry).then((_) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => DashboardScreen()),
-        );
+        context.go('/');
       }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to add entry: $error')),

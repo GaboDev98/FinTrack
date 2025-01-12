@@ -25,5 +25,7 @@
   "register": "Register",
   "create_account": "Create a New Account",
   "add_entry_button": "Save",
-  "transaction_details": "Detalle de la transacción"
+  "transaction_details": "Detalle de la transacción",
+  "register_form": "Registrar",
+  "create_account": "Crear una Nueva Cuenta"
 }

@@ -1,7 +1,13 @@
+import 'entry_screen.dart';
 import 'login_screen.dart';
+import 'profile_screen.dart';
 import 'dashboard_screen.dart';
 import 'firebase_options.dart';
+import 'registration_screen.dart';
+import 'full_transactions_screen.dart';
 import 'package:flutter/material.dart';
+import 'detail_transaction_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,15 +19,78 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
+
+/// The route configuration.
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return const AuthWrapper();
+      },
+      routes: <RouteBase>[
+        GoRoute(
+          path: 'login',
+          builder: (BuildContext context, GoRouterState state) {
+            return LoginScreen();
+          },
+        ),
+        GoRoute(
+          path: 'dashboard',
+          builder: (BuildContext context, GoRouterState state) {
+            return const DashboardScreen();
+          },
+        ),
+        GoRoute(
+          path: 'entry',
+          builder: (BuildContext context, GoRouterState state) {
+            return const EntryScreen();
+          },
+        ),
+        GoRoute(
+          path: 'transactions',
+          builder: (BuildContext context, GoRouterState state) {
+            return const FullTransactionsScreen();
+          },
+        ),
+        GoRoute(
+          path: 'profile',
+          builder: (BuildContext context, GoRouterState state) {
+            return const ProfileScreen();
+          },
+        ),
+        GoRoute(
+          path: 'detail',
+          builder: (BuildContext context, GoRouterState state) {
+            final Map<String, dynamic> transaction =
+                state.extra as Map<String, dynamic>;
+            return DetailTransactionScreen(
+              amount: transaction['amount'],
+              date: transaction['date'],
+              description: transaction['description'],
+              transactionIcon: transaction['transactionIcon'],
+            );
+          },
+        ),
+        GoRoute(
+          path: 'register',
+          builder: (BuildContext context, GoRouterState state) {
+            return RegistrationScreen();
+          },
+        ),
+      ],
+    ),
+  ],
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'FinTrack',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -39,10 +108,10 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
-        Locale('en', ''),
-        Locale('es', ''),
+        const Locale('en', ''), // English
+        const Locale('es', ''), // Spanish
       ],
-      home: AuthWrapper(),
+      routerConfig: _router,
     );
   }
 }
@@ -56,9 +125,9 @@ class AuthWrapper extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData) {
-          return DashboardScreen();
+          return const DashboardScreen();
         } else {
           return LoginScreen();
         }

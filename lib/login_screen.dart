@@ -1,7 +1,6 @@
 import 'auth_service.dart';
-import 'dashboard_screen.dart';
-import 'registration_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -64,11 +63,7 @@ class LoginScreen extends StatelessWidget {
                     User? user = await _authService.signInWithEmailAndPassword(
                         email, password);
                     if (user != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DashboardScreen()),
-                      );
+                      context.go('/dashboard');
                     }
                   } catch (e) {
                     // Show error message
@@ -97,11 +92,7 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: 16.0),
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RegistrationScreen()),
-                  );
+                  context.go('/register');
                 },
                 child: Text(
                   AppLocalizations.of(context)!.register,

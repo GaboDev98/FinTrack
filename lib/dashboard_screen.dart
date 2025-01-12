@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fintrack/entry_screen.dart';
-import 'package:fintrack/login_screen.dart';
-import 'package:fintrack/profile_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fintrack/full_transactions_screen.dart';
-import 'package:fintrack/detail_transaction_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -82,21 +78,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             leading: Icon(Icons.person),
             title: Text(AppLocalizations.of(context)!.profile),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
-              );
+              context.go('/profile');
             },
           ),
           ListTile(
             leading: Icon(Icons.list),
             title: Text(AppLocalizations.of(context)!.transactions),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FullTransactionsScreen()),
-              );
+              context.go('/transactions');
             },
           ),
           ListTile(
@@ -104,11 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             title: Text(AppLocalizations.of(context)!.logout),
             onTap: () async {
               await FirebaseAuth.instance.signOut();
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-                (Route<dynamic> route) => false,
-              );
+              context.go('/login');
             },
           ),
         ]),
@@ -178,18 +163,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         title: Text(transaction['description']),
                         subtitle: Text(transaction['date']),
                         trailing: Text('\$${transaction['amount']}'),
-                        onTap: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailTransactionScreen(
-                                amount: '\$${transaction['amount']}',
-                                date: transaction['date'],
-                                description: transaction['description'],
-                                transactionIcon: Icons.local_gas_station,
-                              ),
-                            ),
-                          )
+                        onTap: () {
+                          context.go('/detail', extra: {
+                            'amount': '\$${transaction['amount']}',
+                            'date': transaction['date'],
+                            'description': transaction['description'],
+                            'transactionIcon': Icons.local_gas_station,
+                          });
                         },
                       );
                     },
@@ -200,12 +180,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FullTransactionsScreen(),
-                      ),
-                    );
+                    context.go('/transactions');
                   },
                   child:
                       Text(AppLocalizations.of(context)!.view_all_transactions),
@@ -217,12 +192,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EntryScreen(),
-            ),
-          );
+          context.go('/entry');
         },
         backgroundColor: Theme.of(context).primaryColor,
         child: Icon(

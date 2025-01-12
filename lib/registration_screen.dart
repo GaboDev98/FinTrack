@@ -1,6 +1,7 @@
 import 'auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegistrationScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -13,7 +14,7 @@ class RegistrationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: Text(AppLocalizations.of(context)!.register_form),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -22,7 +23,7 @@ class RegistrationScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Create a New Account',
+                AppLocalizations.of(context)!.create_account,
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -33,7 +34,7 @@ class RegistrationScreen extends StatelessWidget {
               TextField(
                 controller: emailController,
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: AppLocalizations.of(context)!.email,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
@@ -45,7 +46,7 @@ class RegistrationScreen extends StatelessWidget {
               TextField(
                 controller: passwordController,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: AppLocalizations.of(context)!.password,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
@@ -82,7 +83,7 @@ class RegistrationScreen extends StatelessWidget {
                   elevation: 5,
                 ),
                 child: Text(
-                  'Register',
+                  AppLocalizations.of(context)!.register,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
