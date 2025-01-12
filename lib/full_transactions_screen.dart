@@ -32,10 +32,14 @@ class _FullTransactionsScreenState extends State<FullTransactionsScreen> {
           .onValue
           .listen((DatabaseEvent event) {
         final data = event.snapshot.value as Map<dynamic, dynamic>?;
-        if (data != null) {
+        if (data != null && mounted) {
           setState(() {
             _transactions =
                 data.values.map((e) => e as Map<dynamic, dynamic>).toList();
+          });
+        } else if (mounted) {
+          setState(() {
+            _transactions = [];
           });
         }
       });
@@ -52,7 +56,7 @@ class _FullTransactionsScreenState extends State<FullTransactionsScreen> {
         ),
       ),
       body: _transactions.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: Text(AppLocalizations.of(context)!.no_transactions))
           : ListView.builder(
               itemCount: _transactions.length,
               itemBuilder: (context, index) {
@@ -69,7 +73,7 @@ class _FullTransactionsScreenState extends State<FullTransactionsScreen> {
                   title: Text(transaction['description']),
                   subtitle: Text(transaction['date']),
                   trailing: Text('\$${transaction['amount']}'),
-                  onTap: () => {
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -80,7 +84,7 @@ class _FullTransactionsScreenState extends State<FullTransactionsScreen> {
                           transactionIcon: Icons.local_gas_station,
                         ),
                       ),
-                    )
+                    );
                   },
                 );
               },

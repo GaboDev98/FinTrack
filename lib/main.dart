@@ -40,25 +40,25 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'dashboard',
           builder: (BuildContext context, GoRouterState state) {
-            return const DashboardScreen();
+            return DashboardScreen();
           },
         ),
         GoRoute(
           path: 'entry',
           builder: (BuildContext context, GoRouterState state) {
-            return const EntryScreen();
+            return EntryScreen();
           },
         ),
         GoRoute(
           path: 'transactions',
           builder: (BuildContext context, GoRouterState state) {
-            return const FullTransactionsScreen();
+            return FullTransactionsScreen();
           },
         ),
         GoRoute(
           path: 'profile',
           builder: (BuildContext context, GoRouterState state) {
-            return const ProfileScreen();
+            return ProfileScreen();
           },
         ),
         GoRoute(

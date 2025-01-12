@@ -33,7 +33,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           .onValue
           .listen((DatabaseEvent event) {
         final data = event.snapshot.value as Map<dynamic, dynamic>?;
-        if (data != null) {
+        if (data != null && mounted) {
           setState(() {
             _transactions = data.values
                 .map((e) => e as Map<dynamic, dynamic>)
@@ -144,7 +144,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             SizedBox(height: 10.0),
             _transactions.isEmpty
-                ? Center(child: CircularProgressIndicator())
+                ? Center(
+                    child: Text(
+                        AppLocalizations.of(context)!.no_recent_transactions))
                 : ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

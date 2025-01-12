@@ -63,7 +63,10 @@ class LoginScreen extends StatelessWidget {
                     User? user = await _authService.signInWithEmailAndPassword(
                         email, password);
                     if (user != null) {
-                      context.go('/dashboard');
+                      Router.neglect(
+                        context,
+                        () => context.go('/dashboard'),
+                      );
                     }
                   } catch (e) {
                     // Show error message
