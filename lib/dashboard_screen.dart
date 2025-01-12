@@ -21,7 +21,13 @@ class DashboardScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.financial_summary),
+          title: Text(
+            AppLocalizations.of(context)!.financial_summary,
+            style: TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
         endDrawer: Drawer(
           child: ListView(
@@ -80,14 +86,6 @@ class DashboardScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                AppLocalizations.of(context)!.financial_summary,
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 20.0),
               Card(
                 elevation: 5,
                 shape: RoundedRectangleBorder(

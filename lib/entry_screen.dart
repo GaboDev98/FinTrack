@@ -16,7 +16,6 @@ class _EntryScreenState extends State<EntryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    entryType = AppLocalizations.of(context)!.income;
     return Scaffold(
       appBar: AppBar(
         title: Align(
@@ -36,10 +35,8 @@ class _EntryScreenState extends State<EntryScreen> {
                   entryType = newValue!;
                 });
               },
-              items: <String>[
-                AppLocalizations.of(context)!.income,
-                AppLocalizations.of(context)!.expenses
-              ].map<DropdownMenuItem<String>>((String value) {
+              items: <String>['Income', 'Expense']
+                  .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
