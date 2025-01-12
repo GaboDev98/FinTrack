@@ -51,5 +51,4 @@ firebase.json
 android/app/google-services.json
 
 # Ignore application-specific files
-lib/dashboard_screen.dart
 android/app/src/main/res/values/values.xml
