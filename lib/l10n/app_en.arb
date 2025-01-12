@@ -10,7 +10,8 @@
   "expenses": "Expenses",
   "recent_transactions": "Recent Transactions",
   "view_all_transactions": "View All Transactions",
-  "add_entry": "Add Entry",
+  "add_entry": "Register",
+  "entry_type": "Entry Type",
   "grocery_shopping": "Grocery Shopping",
   "gas_station": "Gas Station",
   "restaurant": "Restaurant",
@@ -23,6 +24,6 @@
   "login": "Login",
   "register": "Register",
   "create_account": "Create a New Account",
-  "add_entry_button": "Add Entry",
+  "add_entry_button": "Save",
   "transaction_details": "Detalle de la transacción"
 }

@@ -1,81 +1,90 @@
+import 'package:fintrack/detail_transaction_screen.dart';
 import 'package:flutter/material.dart';
-import 'detail_transaction_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class FullTransactionsScreen extends StatelessWidget {
+class FullTransactionsScreen extends StatefulWidget {
   const FullTransactionsScreen({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _FullTransactionsScreenState createState() => _FullTransactionsScreenState();
+}
+
+class _FullTransactionsScreenState extends State<FullTransactionsScreen> {
+  final DatabaseReference _database =
+      FirebaseDatabase.instance.ref().child('entries');
+  List<Map<dynamic, dynamic>> _transactions = [];
+  final User? user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTransactions();
+  }
+
+  void _fetchTransactions() {
+    if (user != null) {
+      _database
+          .orderByChild('userId')
+          .equalTo(user!.uid)
+          .onValue
+          .listen((DatabaseEvent event) {
+        final data = event.snapshot.value as Map<dynamic, dynamic>?;
+        if (data != null) {
+          setState(() {
+            _transactions =
+                data.values.map((e) => e as Map<dynamic, dynamic>).toList();
+          });
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Transactions'),
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(AppLocalizations.of(context)!.transactions),
+        ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: <Widget>[
-          ListTile(
-            leading: Icon(Icons.shopping_cart, color: Colors.orange),
-            title: Text('Grocery Shopping'),
-            subtitle: Text('\$150.00'),
-            trailing: Text('Oct 1, 2023'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailTransactionScreen(
-                    title: 'Grocery Shopping',
-                    amount: '\$150.00',
-                    date: 'Oct 1, 2023',
-                    description: 'Grocery shopping at the local market.',
-                    transactionIcon: Icons.shopping_cart,
+      body: _transactions.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: _transactions.length,
+              itemBuilder: (context, index) {
+                final transaction = _transactions[index];
+                return ListTile(
+                  leading: Icon(
+                    transaction['type'] == 'Income'
+                        ? Icons.arrow_upward
+                        : Icons.arrow_downward,
+                    color: transaction['type'] == 'Income'
+                        ? Colors.green
+                        : Colors.red,
                   ),
-                ),
-              );
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.local_gas_station, color: Colors.blue),
-            title: Text('Gas Station'),
-            subtitle: Text('\$60.00'),
-            trailing: Text('Oct 2, 2023'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailTransactionScreen(
-                    title: 'Gas Station',
-                    amount: '\$60.00',
-                    date: 'Oct 2, 2023',
-                    description: 'Fuel for the car.',
-                    transactionIcon: Icons.local_gas_station,
-                  ),
-                ),
-              );
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.restaurant, color: Colors.purple),
-            title: Text('Restaurant'),
-            subtitle: Text('\$80.00'),
-            trailing: Text('Oct 3, 2023'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailTransactionScreen(
-                    title: 'Restaurant',
-                    amount: '\$80.00',
-                    date: 'Oct 3, 2023',
-                    description: 'Dinner at a restaurant.',
-                    transactionIcon: Icons.restaurant,
-                  ),
-                ),
-              );
-            },
-          ),
-          // Add more transactions here
-        ],
-      ),
+                  title: Text(transaction['description']),
+                  subtitle: Text(transaction['date']),
+                  trailing: Text('\$${transaction['amount']}'),
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailTransactionScreen(
+                          amount: '\$${transaction['amount']}',
+                          date: transaction['date'],
+                          description: transaction['description'],
+                          transactionIcon: Icons.local_gas_station,
+                        ),
+                      ),
+                    )
+                  },
+                );
+              },
+            ),
     );
   }
 }

@@ -1,5 +1,7 @@
+import 'package:fintrack/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EntryScreen extends StatefulWidget {
@@ -13,7 +15,7 @@ class EntryScreen extends StatefulWidget {
 class _EntryScreenState extends State<EntryScreen> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  String entryType = 'Income';
+  String entryType = 'Expense';
 
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
@@ -31,6 +33,14 @@ class _EntryScreenState extends State<EntryScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Text(
+              AppLocalizations.of(context)!.entry_type,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8.0),
             DropdownButton<String>(
               value: entryType,
               onChanged: (String? newValue) {
@@ -38,7 +48,7 @@ class _EntryScreenState extends State<EntryScreen> {
                   entryType = newValue!;
                 });
               },
-              items: <String>['Income', 'Expense']
+              items: <String>['Expense', 'Income']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -99,20 +109,25 @@ class _EntryScreenState extends State<EntryScreen> {
     );
   }
 
-  void _saveEntry() {
+  void _saveEntry() async {
     final String amount = amountController.text;
     final String description = descriptionController.text;
+    final User? user = FirebaseAuth.instance.currentUser;
 
-    if (amount.isNotEmpty && description.isNotEmpty) {
+    if (amount.isNotEmpty && description.isNotEmpty && user != null) {
       final entry = {
         'type': entryType,
         'amount': amount,
         'description': description,
         'date': DateTime.now().toIso8601String(),
+        'userId': user.uid,
       };
 
       _database.child('entries').push().set(entry).then((_) {
-        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DashboardScreen()),
+        );
       }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to add entry: $error')),

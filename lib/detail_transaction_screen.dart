@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailTransactionScreen extends StatelessWidget {
-  final String title;
   final String amount;
   final String date;
   final String description;
@@ -10,7 +9,6 @@ class DetailTransactionScreen extends StatelessWidget {
 
   const DetailTransactionScreen({
     super.key,
-    required this.title,
     required this.amount,
     required this.date,
     required this.description,
@@ -20,20 +18,13 @@ class DetailTransactionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.transaction_details)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Center(
-              child: Icon(
-                transactionIcon,
-                size: 64.0,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-            SizedBox(height: 16.0),
             Card(
               elevation: 5,
               shape: RoundedRectangleBorder(
