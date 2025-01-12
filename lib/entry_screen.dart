@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EntryScreen extends StatefulWidget {
@@ -13,6 +14,8 @@ class _EntryScreenState extends State<EntryScreen> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   String entryType = 'Income';
+
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +74,7 @@ class _EntryScreenState extends State<EntryScreen> {
             SizedBox(height: 32.0),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  // Handle entry creation logic here
-                  Navigator.pop(context);
-                },
+                onPressed: _saveEntry,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   shape: RoundedRectangleBorder(
@@ -97,5 +97,31 @@ class _EntryScreenState extends State<EntryScreen> {
         ),
       ),
     );
+  }
+
+  void _saveEntry() {
+    final String amount = amountController.text;
+    final String description = descriptionController.text;
+
+    if (amount.isNotEmpty && description.isNotEmpty) {
+      final entry = {
+        'type': entryType,
+        'amount': amount,
+        'description': description,
+        'date': DateTime.now().toIso8601String(),
+      };
+
+      _database.child('entries').push().set(entry).then((_) {
+        Navigator.pop(context);
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to add entry: $error')),
+        );
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill in all fields')),
+      );
+    }
   }
 }
