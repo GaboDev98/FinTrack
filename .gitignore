@@ -43,3 +43,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Ignore Firebase Configuration
+lib/firebase_options.dart
+ios/Runner/GoogleService-Info.plist
+firebase.json
+android/app/google-services.json
+
+# Ignore application-specific files
+lib/dashboard_screen.dart
+android/app/src/main/res/values/values.xml
