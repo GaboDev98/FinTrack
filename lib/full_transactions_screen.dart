@@ -1,6 +1,7 @@
-import 'package:fintrack/detail_transaction_screen.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fintrack/detail_transaction_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -17,6 +18,8 @@ class _FullTransactionsScreenState extends State<FullTransactionsScreen> {
       FirebaseDatabase.instance.ref().child('entries');
   List<Map<dynamic, dynamic>> _transactions = [];
   final User? user = FirebaseAuth.instance.currentUser;
+  final NumberFormat currencyFormat =
+      NumberFormat.currency(symbol: '\$', decimalDigits: 2);
 
   @override
   void initState() {
@@ -61,6 +64,8 @@ class _FullTransactionsScreenState extends State<FullTransactionsScreen> {
               itemCount: _transactions.length,
               itemBuilder: (context, index) {
                 final transaction = _transactions[index];
+                final amount =
+                    double.tryParse(transaction['amount'].toString()) ?? 0.0;
                 return ListTile(
                   leading: Icon(
                     transaction['type'] == 'Income'
@@ -72,13 +77,13 @@ class _FullTransactionsScreenState extends State<FullTransactionsScreen> {
                   ),
                   title: Text(transaction['description']),
                   subtitle: Text(transaction['date']),
-                  trailing: Text('\$${transaction['amount']}'),
+                  trailing: Text(currencyFormat.format(amount)),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailTransactionScreen(
-                          amount: '\$${transaction['amount']}',
+                          amount: currencyFormat.format(amount),
                           date: transaction['date'],
                           description: transaction['description'],
                           transactionIcon: Icons.local_gas_station,

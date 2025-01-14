@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,19 +14,59 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final DatabaseReference _database =
-      FirebaseDatabase.instance.ref().child('entries');
-  List<Map<dynamic, dynamic>> _transactions = [];
   final User? user = FirebaseAuth.instance.currentUser;
+  double totalBalance = 0.0;
+  double totalIncome = 0.0;
+  double totalExpenses = 0.0;
+  List<Map<dynamic, dynamic>> _transactions = [];
+
+  final NumberFormat currencyFormat =
+      NumberFormat.currency(symbol: '\$', decimalDigits: 2);
+  final DateFormat dateFormat = DateFormat('dd-MM-yyyy hh:mm a');
 
   @override
   void initState() {
     super.initState();
+    _fetchUserSummary();
     _fetchTransactions();
+  }
+
+  void _fetchUserSummary() {
+    if (user != null) {
+      final DatabaseReference _database =
+          FirebaseDatabase.instance.ref().child('entries');
+      _database
+          .orderByChild('userId')
+          .equalTo(user!.uid)
+          .onValue
+          .listen((DatabaseEvent event) {
+        final data = event.snapshot.value as Map<dynamic, dynamic>?;
+        if (data != null && mounted) {
+          double income = 0.0;
+          double expenses = 0.0;
+          data.forEach((key, value) {
+            final entry = value as Map<dynamic, dynamic>;
+            final amount = double.tryParse(entry['amount'].toString()) ?? 0.0;
+            if (entry['type'] == 'Income') {
+              income += amount;
+            } else if (entry['type'] == 'Expense') {
+              expenses += amount;
+            }
+          });
+          setState(() {
+            totalIncome = income;
+            totalExpenses = expenses;
+            totalBalance = income - expenses;
+          });
+        }
+      });
+    }
   }
 
   void _fetchTransactions() {
     if (user != null) {
+      final DatabaseReference _database =
+          FirebaseDatabase.instance.ref().child('entries');
       _database
           .orderByChild('userId')
           .equalTo(user!.uid)
@@ -35,11 +76,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         final data = event.snapshot.value as Map<dynamic, dynamic>?;
         if (data != null && mounted) {
           setState(() {
-            _transactions = data.values
-                .map((e) => e as Map<dynamic, dynamic>)
-                .toList()
-                .reversed
-                .toList();
+            _transactions =
+                data.values.map((e) => e as Map<dynamic, dynamic>).toList();
+            _transactions.sort((a, b) {
+              final dateA = DateTime.tryParse(a['date']) ?? DateTime.now();
+              final dateB = DateTime.tryParse(b['date']) ?? DateTime.now();
+              return dateB.compareTo(dateA);
+            });
           });
         }
       });
@@ -116,19 +159,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       leading: Icon(Icons.account_balance_wallet,
                           color: Colors.blueAccent),
                       title: Text(AppLocalizations.of(context)!.total_balance),
-                      subtitle: Text('\$12,345.67'),
+                      subtitle: Text(
+                        currencyFormat.format(totalBalance),
+                        style: TextStyle(
+                          color: totalBalance < 0 ? Colors.red : Colors.green,
+                        ),
+                      ),
                     ),
                     Divider(),
                     ListTile(
                       leading: Icon(Icons.arrow_upward, color: Colors.green),
                       title: Text(AppLocalizations.of(context)!.income),
-                      subtitle: Text('\$5,000.00'),
+                      subtitle: Text(currencyFormat.format(totalIncome)),
                     ),
                     Divider(),
                     ListTile(
                       leading: Icon(Icons.arrow_downward, color: Colors.red),
                       title: Text(AppLocalizations.of(context)!.expenses),
-                      subtitle: Text('\$2,500.00'),
+                      subtitle: Text(currencyFormat.format(totalExpenses)),
                     ),
                   ],
                 ),
@@ -153,6 +201,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     itemCount: _transactions.length,
                     itemBuilder: (context, index) {
                       final transaction = _transactions[index];
+                      final amount =
+                          double.tryParse(transaction['amount'].toString()) ??
+                              0.0;
+                      final date = DateTime.tryParse(transaction['date']) ??
+                          DateTime.now();
                       return ListTile(
                         leading: Icon(
                           transaction['type'] == 'Income'
@@ -163,12 +216,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               : Colors.red,
                         ),
                         title: Text(transaction['description']),
-                        subtitle: Text(transaction['date']),
-                        trailing: Text('\$${transaction['amount']}'),
+                        subtitle: Text(dateFormat.format(date)),
+                        trailing: Text(currencyFormat.format(amount)),
                         onTap: () {
                           context.go('/detail', extra: {
-                            'amount': '\$${transaction['amount']}',
-                            'date': transaction['date'],
+                            'amount': currencyFormat.format(amount),
+                            'date': dateFormat.format(date),
                             'description': transaction['description'],
                             'transactionIcon': Icons.local_gas_station,
                           });

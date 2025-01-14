@@ -1,4 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,6 +10,7 @@ class EntryScreen extends StatefulWidget {
   const EntryScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _EntryScreenState createState() => _EntryScreenState();
 }
 
@@ -17,6 +20,49 @@ class _EntryScreenState extends State<EntryScreen> {
   String entryType = 'Expense';
 
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
+
+  @override
+  void dispose() {
+    amountController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  String formNum(String s) {
+    if (s.isEmpty) return '';
+    return NumberFormat.decimalPattern().format(
+      double.tryParse(s) ?? 0.0,
+    );
+  }
+
+  void _saveEntry() async {
+    final String amount =
+        amountController.text.replaceAll(RegExp(r'[^\d.]'), '');
+    final String description = descriptionController.text;
+    final User? user = FirebaseAuth.instance.currentUser;
+
+    if (amount.isNotEmpty && description.isNotEmpty && user != null) {
+      final entry = {
+        'type': entryType,
+        'amount': amount,
+        'description': description,
+        'date': DateTime.now().toIso8601String(),
+        'userId': user.uid,
+      };
+
+      _database.child('entries').push().set(entry).then((_) {
+        context.go('/');
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to add entry: $error')),
+        );
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill in all fields')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,17 +102,30 @@ class _EntryScreenState extends State<EntryScreen> {
               }).toList(),
             ),
             SizedBox(height: 16.0),
-            TextField(
+            TextFormField(
               controller: amountController,
               decoration: InputDecoration(
                 labelText: AppLocalizations.of(context)!.amount,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
+                prefixIcon: Icon(Icons.monetization_on),
                 filled: true,
                 fillColor: Theme.of(context).cardColor,
               ),
               keyboardType: TextInputType.number,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(15), // Limit to 15 characters
+              ],
+              onChanged: (string) {
+                string = formNum(string.replaceAll(',', ''));
+                amountController.value = TextEditingValue(
+                  text: string,
+                  selection: TextSelection.collapsed(
+                    offset: string.length,
+                  ),
+                );
+              },
             ),
             SizedBox(height: 16.0),
             TextField(
@@ -106,33 +165,5 @@ class _EntryScreenState extends State<EntryScreen> {
         ),
       ),
     );
-  }
-
-  void _saveEntry() async {
-    final String amount = amountController.text;
-    final String description = descriptionController.text;
-    final User? user = FirebaseAuth.instance.currentUser;
-
-    if (amount.isNotEmpty && description.isNotEmpty && user != null) {
-      final entry = {
-        'type': entryType,
-        'amount': amount,
-        'description': description,
-        'date': DateTime.now().toIso8601String(),
-        'userId': user.uid,
-      };
-
-      _database.child('entries').push().set(entry).then((_) {
-        context.go('/');
-      }).catchError((error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add entry: $error')),
-        );
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all fields')),
-      );
-    }
   }
 }
