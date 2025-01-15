@@ -1,3 +1,5 @@
+import 'package:fintrack/user_summary_viewmodel.dart';
+
 import 'entry_screen.dart';
 import 'login_screen.dart';
 import 'profile_screen.dart';
@@ -7,6 +9,7 @@ import 'registration_screen.dart';
 import 'full_transactions_screen.dart';
 import 'package:flutter/material.dart';
 import 'detail_transaction_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +22,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => UserSummaryViewModel(),
+      child: MyApp(),
+    ),
+  );
 }
 
 /// The route configuration.
