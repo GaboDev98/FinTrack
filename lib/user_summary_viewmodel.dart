@@ -10,11 +10,11 @@ class UserSummaryViewModel extends ChangeNotifier {
   List<Map<dynamic, dynamic>> _transactions = [];
 
   UserSummaryViewModel() {
-    _fetchUserSummary();
-    _fetchTransactions();
+    fetchUserSummary();
+    fetchTransactions();
   }
 
-  void _fetchUserSummary() {
+  Future<void> fetchUserSummary() async {
     if (user != null) {
       final DatabaseReference _database =
           FirebaseDatabase.instance.ref().child('entries');
@@ -45,7 +45,7 @@ class UserSummaryViewModel extends ChangeNotifier {
     }
   }
 
-  void _fetchTransactions() {
+  Future<void> fetchTransactions() async {
     if (user != null) {
       final DatabaseReference _database =
           FirebaseDatabase.instance.ref().child('entries');
