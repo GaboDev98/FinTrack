@@ -83,6 +83,11 @@ jobs:
       - name: Verify the Dart Code is Formatted
         run: dart format --output=none --set-exit-if-changed .
 
+      - name: Check Flutter and Dart Versions
+        run: |
+          flutter --version
+          dart --version
+
       - name: Analyze the Dart Code
         run: flutter analyze --fatal-warnings
 
