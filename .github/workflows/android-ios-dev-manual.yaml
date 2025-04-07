@@ -41,29 +41,36 @@ jobs:
           curl -sL https://firebase.tools | bash
           firebase --version
 
+      - name: Authenticate Firebase CLI
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+        run: |
+          firebase login:ci --token "$(cat $GOOGLE_APPLICATION_CREDENTIALS)"
+          firebase projects:list
+
       - name: Generate Firebase Options
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_APP_DISTRIBUTION_CREDENTIAL_FILE_CONTENT }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
         run: |
           dart pub global activate flutterfire_cli
           flutterfire configure --project fintrack-943a7 --yes
 
-      - name: Install iOs dependencies
+      - name: Install iOS Dependencies
         run: |
           cd ios
           pod install
           cd ..
 
-      - name: Auto format the dart code
+      - name: Auto Format the Dart Code
         run: dart format .
 
-      - name: Verify the dart code is formatted
+      - name: Verify the Dart Code is Formatted
         run: dart format --output=none --set-exit-if-changed .
 
-      - name: Analyze the dart code
+      - name: Analyze the Dart Code
         run: flutter analyze --fatal-warnings
 
-      - name: Run tests
+      - name: Run Tests
         run: flutter test
 
       - name: Build APK
@@ -78,7 +85,7 @@ jobs:
           name: android-debug-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
 
-      - name: upload artifact to Firebase App Distribution
+      - name: Upload Artifact to Firebase App Distribution
         uses: emertozd/Firebase-Distribution-Github-Action@v2
         with:
           appId: ${{ secrets.FIREBASE_APP_ANDROID_DEV }}
