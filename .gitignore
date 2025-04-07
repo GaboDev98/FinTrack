@@ -79,3 +79,10 @@ android/app/src/main/res/values/values.xml
 # Ignorar cualquier archivo generado en subdirectorios por compilación en Debug y Release
 **/Debug/
 **/Release/
+
+# Firebase y otros archivos sensibles
+macos/Runner/GoogleService-Info.plist
+ios/GoogleService-Info.plist
+ios/Podfile.lock
+**/*.xcworkspace/
+**/*.xcshareddata/
