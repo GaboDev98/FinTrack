@@ -1,7 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -36,10 +35,13 @@ class _EntryScreenState extends State<EntryScreen> {
   }
 
   void _saveEntry() async {
-    final String amount =
-        amountController.text.replaceAll(RegExp(r'[^\d.]'), '');
+    final String amount = amountController.text.replaceAll(RegExp(r'[^\d.]'), '');
     final String description = descriptionController.text;
     final User? user = FirebaseAuth.instance.currentUser;
+
+    // Guarda el BuildContext antes de operaciones asíncronas.
+    final navigator = Navigator.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     if (amount.isNotEmpty && description.isNotEmpty && user != null) {
       final entry = {
@@ -50,15 +52,16 @@ class _EntryScreenState extends State<EntryScreen> {
         'userId': user.uid,
       };
 
-      _database.child('entries').push().set(entry).then((_) {
-        context.go('/');
-      }).catchError((error) {
-        ScaffoldMessenger.of(context).showSnackBar(
+      try {
+        await _database.child('entries').push().set(entry);
+        navigator.pushReplacementNamed('/');
+      } catch (error) {
+        scaffoldMessenger.showSnackBar(
           SnackBar(content: Text('Failed to add entry: $error')),
         );
-      });
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldMessenger.showSnackBar(
         SnackBar(content: Text('Please fill in all fields')),
       );
     }

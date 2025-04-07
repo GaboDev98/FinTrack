@@ -1,3 +1,4 @@
+import 'package:fintrack/app_routes.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -8,8 +9,12 @@ class DashboardSummaryCard extends StatelessWidget {
   final Dashboard dashboard;
   final NumberFormat currencyFormat;
 
-  const DashboardSummaryCard(
-      {super.key, required this.dashboard, required this.currencyFormat});
+  // ignore: use_super_parameters
+  const DashboardSummaryCard({
+    Key? key, 
+    required this.dashboard,
+    required this.currencyFormat,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +62,13 @@ class RecentTransactionsList extends StatelessWidget {
   final NumberFormat currencyFormat;
   final DateFormat dateFormat;
 
-  RecentTransactionsList({
+  // ignore: use_super_parameters
+  const RecentTransactionsList({
+    Key? key, // Añadido parámetro Key.
     required this.transactions,
     required this.currencyFormat,
     required this.dateFormat,
-  });
+  }) : super(key: key); // Pasando Key al constructor base.
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +98,7 @@ class RecentTransactionsList extends StatelessWidget {
                 subtitle: Text(dateFormat.format(date)),
                 trailing: Text(currencyFormat.format(amount)),
                 onTap: () {
-                  context.go('/detail', extra: {
+                  context.go(AppRoutes.detail, extra: {
                     'amount': currencyFormat.format(amount),
                     'date': dateFormat.format(date),
                     'description': transaction['description'],
