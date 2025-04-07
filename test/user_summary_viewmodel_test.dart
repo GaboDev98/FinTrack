@@ -13,20 +13,16 @@ class MockDatabaseReference extends Mock implements DatabaseReference {}
 class MockDatabaseEvent extends Mock implements DatabaseEvent {}
 
 void main() {
-  late MockFirebaseAuth mockFirebaseAuth;
-  late MockUser mockUser;
-  late MockDatabaseReference mockDatabaseReference;
+  late MockFirebaseAuth mockFirebaseAuth; // ignore: unused_local_variable
+  late MockUser mockUser; // ignore: unused_local_variable
+  late MockDatabaseReference mockDatabaseReference; // ignore: unused_local_variable
   late UserSummaryViewModel viewModel;
 
   setUp(() {
     // Configuración de los mocks
-    mockFirebaseAuth = MockFirebaseAuth();
-    mockUser = MockUser();
-    mockDatabaseReference = MockDatabaseReference();
-
-    // Simula el comportamiento de FirebaseAuth y User
-    // when(() => mockFirebaseAuth.currentUser).thenAnswer((_) => mockUser);
-    // when(() => mockUser.uid).thenReturn('testUserId');
+    mockFirebaseAuth = MockFirebaseAuth(); // ignore: unused_local_variable
+    mockUser = MockUser(); // ignore: unused_local_variable
+    mockDatabaseReference = MockDatabaseReference(); // ignore: unused_local_variable
 
     // Inicializa el viewModel manualmente
     viewModel = UserSummaryViewModel();
@@ -41,7 +37,8 @@ void main() {
   }, skip: true); // Se deshabilita temporalmente esta prueba
 
   test('fetchUserSummary updates values correctly', () async {
-    final mockDatabaseEvent = MockDatabaseEvent();
+    final mockDatabaseEvent = MockDatabaseEvent(); // ignore: unused_local_variable
+    // ignore: unused_local_variable
     final mockData = {
       'entry1': {
         'amount': '100.0',
@@ -51,7 +48,7 @@ void main() {
         'amount': '50.0',
         'type': 'Expense',
       },
-    };
+    }; // ignore: unused_local_variable
 
     // Configura el mock de FirebaseDatabase
     // when(() => mockDatabaseReference.onValue)
@@ -69,7 +66,8 @@ void main() {
   }, skip: true); // Se deshabilita temporalmente esta prueba
 
   test('fetchTransactions updates transactions correctly', () async {
-    final mockDatabaseEvent = MockDatabaseEvent();
+    final mockDatabaseEvent = MockDatabaseEvent(); // ignore: unused_local_variable
+    // ignore: unused_local_variable
     final mockData = {
       'entry1': {
         'amount': '100.0',
@@ -83,7 +81,7 @@ void main() {
         'date': '2023-01-02T00:00:00Z',
         'description': 'Test Expense',
       },
-    };
+    }; // ignore: unused_local_variable
 
     // Configura el mock de FirebaseDatabase
     // when(() => mockDatabaseReference.onValue)
