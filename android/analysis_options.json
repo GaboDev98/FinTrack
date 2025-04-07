@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "466270665551",
+    "firebase_url": "https://fintrack-943a7-default-rtdb.firebaseio.com",
+    "project_id": "fintrack-943a7",
+    "storage_bucket": "fintrack-943a7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466270665551:android:ba926577119a7f40f2a33a",
+        "android_client_info": {
+          "package_name": "com.gabodev.fintrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSvAat6tSd80wmE5jN9HmqEkXwjDmFsZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
