@@ -52,3 +52,30 @@ android/app/google-services.json
 
 # Ignore application-specific files
 android/app/src/main/res/values/values.xml
+
+# Ignorar carpetas generadas por compilación para Android NDK
+**/.cxx/
+
+# Ignorar configuraciones temporales y archivos generados por CMake
+**/CMakeFiles/
+**/CMakeCache.txt
+**/build.ninja
+**/cmake_install.cmake
+**/.cmake/
+
+# Ignorar archivos de configuración y metadatos de generación
+**/configure_fingerprint.bin
+**/metadata_generation_command.txt
+**/additional_project_files.txt
+**/android_gradle_build*.json
+**/symbol_folder_index.txt
+**/prefab_config.json
+
+# Ignorar índices y cachés generados
+**/build_file_index.txt
+**/cmake.check_cache
+**/rules.ninja
+
+# Ignorar cualquier archivo generado en subdirectorios por compilación en Debug y Release
+**/Debug/
+**/Release/
