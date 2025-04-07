@@ -36,6 +36,11 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Install Firebase CLI
+        run: |
+          curl -sL https://firebase.tools | bash
+          firebase --version
+
       - name: Generate Firebase Options
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_APP_DISTRIBUTION_CREDENTIAL_FILE_CONTENT }}
