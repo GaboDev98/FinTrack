@@ -1,5 +1,3 @@
-import 'package:fintrack/user_summary_viewmodel.dart';
-
 import 'entry_screen.dart';
 import 'login_screen.dart';
 import 'profile_screen.dart';
@@ -13,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fintrack/user_summary_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
