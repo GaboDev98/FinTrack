@@ -52,7 +52,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
         run: |
           dart pub global activate flutterfire_cli
-          flutterfire configure --project fintrack-943a7 --token "$FIREBASE_TOKEN" --yes
+          flutterfire configure --project fintrack-943a7 --platforms ios,android --token "$FIREBASE_TOKEN" --yes
 
       - name: Install iOS Dependencies
         run: |
