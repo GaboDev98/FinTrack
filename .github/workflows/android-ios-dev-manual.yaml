@@ -36,13 +36,20 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Generate Firebase Options
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_APP_DISTRIBUTION_CREDENTIAL_FILE_CONTENT }}
+        run: |
+          dart pub global activate flutterfire_cli
+          flutterfire configure --yes
+
       - name: Install iOs dependencies
         run: |
           cd ios
           pod install
           cd ..
 
-      - name: Auto format the dart  code
+      - name: Auto format the dart code
         run: dart format .
 
       - name: Verify the dart code is formatted
