@@ -33,6 +33,23 @@ jobs:
           channel: 'stable'
           flutter-version: '3.27.3'
 
+      - name: Increment Version
+        run: |
+          # Obtiene la versión actual del pubspec.yaml
+          current_version=$(grep "version:" pubspec.yaml | awk '{print $2}')
+          
+          # Divide la versión en partes (x.y.z+build_number)
+          base_version=$(echo $current_version | cut -d'+' -f1)
+          current_build=$(echo $current_version | cut -d'+' -f2)
+          
+          # Incrementa el build number
+          next_build=$((current_build + 1))
+          
+          # Reemplaza la versión en pubspec.yaml
+          sed -i '' "s/version: $current_version/version: $base_version+$next_build/" pubspec.yaml
+          
+          echo "Versión actualizada a: $base_version+$next_build"
+
       - name: Install Dependencies
         run: flutter pub get
 
@@ -73,10 +90,10 @@ jobs:
         run: flutter test
 
       - name: Build APK
-        run: flutter build apk --debug --build-name=1.0.0 --build-number=4
+        run: flutter build apk --debug --build-name=1.0.0 --build-number=$((current_build + 1))
 
       - name: Build iOS
-        run: flutter build ios --debug --build-name=1.0.0 --build-number=4 --no-codesign
+        run: flutter build ios --debug --build-name=1.0.0 --build-number=$((current_build + 1)) --no-codesign
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
