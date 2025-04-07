@@ -43,17 +43,16 @@ jobs:
 
       - name: Authenticate Firebase CLI
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
         run: |
-          firebase login:ci --token "$(cat $GOOGLE_APPLICATION_CREDENTIALS)"
-          firebase projects:list
+          firebase projects:list --token "$FIREBASE_TOKEN"
 
       - name: Generate Firebase Options
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
         run: |
           dart pub global activate flutterfire_cli
-          flutterfire configure --project fintrack-943a7 --yes
+          flutterfire configure --project fintrack-943a7 --token "$FIREBASE_TOKEN" --yes
 
       - name: Install iOS Dependencies
         run: |
