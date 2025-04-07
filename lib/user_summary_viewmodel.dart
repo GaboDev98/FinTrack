@@ -16,9 +16,9 @@ class UserSummaryViewModel extends ChangeNotifier {
 
   Future<void> fetchUserSummary() async {
     if (user != null) {
-      final DatabaseReference _database =
+      final DatabaseReference database = 
           FirebaseDatabase.instance.ref().child('entries');
-      _database
+      database
           .orderByChild('userId')
           .equalTo(user!.uid)
           .onValue
@@ -47,9 +47,9 @@ class UserSummaryViewModel extends ChangeNotifier {
 
   Future<void> fetchTransactions() async {
     if (user != null) {
-      final DatabaseReference _database =
+      final DatabaseReference database =
           FirebaseDatabase.instance.ref().child('entries');
-      _database
+      database
           .orderByChild('userId')
           .equalTo(user!.uid)
           .limitToLast(3)

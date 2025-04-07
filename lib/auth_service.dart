@@ -1,7 +1,9 @@
+import 'package:logger/logger.dart'; 
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final Logger _logger = Logger(); // Instancia del logger.
 
   // Sign in with email and password
   Future<User?> signInWithEmailAndPassword(
@@ -15,14 +17,18 @@ class AuthService {
       // Handle specific FirebaseAuth exceptions
       switch (e.code) {
         case 'user-not-found':
+          _logger.e('No user found for that email.');
           throw Exception('No user found for that email.');
         case 'wrong-password':
+          _logger.e('Wrong password provided.');
           throw Exception('Wrong password provided.');
         default:
+          _logger.e('An unexpected error occurred: ${e.message}');
           throw Exception('An unexpected error occurred: ${e.message}');
       }
     } catch (e) {
       // Handle any other exceptions
+      _logger.e('An unexpected error occurred: $e');
       throw Exception('An unexpected error occurred: $e');
     }
   }
@@ -39,14 +45,18 @@ class AuthService {
       // Handle specific FirebaseAuth exceptions
       switch (e.code) {
         case 'email-already-in-use':
+          _logger.e('The email address is already in use.');
           throw Exception('The email address is already in use.');
         case 'weak-password':
+          _logger.e('The password provided is too weak.');
           throw Exception('The password provided is too weak.');
         default:
+          _logger.e('An unexpected error occurred: ${e.message}');
           throw Exception('An unexpected error occurred: ${e.message}');
       }
     } catch (e) {
       // Handle any other exceptions
+      _logger.e('An unexpected error occurred: $e');
       throw Exception('An unexpected error occurred: $e');
     }
   }
@@ -54,10 +64,10 @@ class AuthService {
   // Sign out
   Future<void> signOut() async {
     try {
-      return await _auth.signOut();
+      await _auth.signOut();
+      _logger.i('User signed out successfully.');
     } catch (e) {
-      print(e.toString());
-      return null;
+      _logger.e('Error signing out: $e');
     }
   }
 

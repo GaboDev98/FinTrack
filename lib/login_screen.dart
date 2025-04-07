@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fintrack/app_routes.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -76,20 +77,18 @@ class LoginScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+                      final scaffoldMessenger = ScaffoldMessenger.of(context);
                       String email = emailController.text;
                       String password = passwordController.text;
                       try {
                         User? user = await _authService
                             .signInWithEmailAndPassword(email, password);
                         if (user != null) {
-                          Router.neglect(
-                            context,
-                            () => context.go('/dashboard'),
-                          );
+                          // ignore: use_build_context_synchronously
+                          context.go(AppRoutes.dashboard);
                         }
                       } catch (e) {
-                        // Show error message
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        scaffoldMessenger.showSnackBar(
                           SnackBar(content: Text(e.toString())),
                         );
                       }
@@ -115,7 +114,7 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(height: 16.0),
                 TextButton(
                   onPressed: () {
-                    context.go('/register');
+                    context.go(AppRoutes.register);
                   },
                   child: Text(
                     AppLocalizations.of(context)!.register,

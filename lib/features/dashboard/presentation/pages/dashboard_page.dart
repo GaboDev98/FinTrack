@@ -1,3 +1,4 @@
+import 'package:fintrack/app_routes.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +62,7 @@ class DashboardPage extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 20.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          context.go('/transactions');
+                          context.go(AppRoutes.transactions);
                         },
                         child: Text(AppLocalizations.of(context)!
                             .view_all_transactions),

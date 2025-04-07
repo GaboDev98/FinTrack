@@ -8,6 +8,7 @@ import 'full_transactions_screen.dart';
 import 'package:flutter/material.dart';
 import 'detail_transaction_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:fintrack/app_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,37 +40,37 @@ final GoRouter _router = GoRouter(
       },
       routes: <RouteBase>[
         GoRoute(
-          path: 'login',
+          path: AppRoutes.login,
           builder: (BuildContext context, GoRouterState state) {
             return LoginScreen();
           },
         ),
         GoRoute(
-          path: 'dashboard',
+          path: AppRoutes.dashboard,
           builder: (BuildContext context, GoRouterState state) {
             return DashboardScreen();
           },
         ),
         GoRoute(
-          path: 'entry',
+          path: AppRoutes.entry,
           builder: (BuildContext context, GoRouterState state) {
             return EntryScreen();
           },
         ),
         GoRoute(
-          path: 'transactions',
+          path: AppRoutes.transactions,
           builder: (BuildContext context, GoRouterState state) {
             return FullTransactionsScreen();
           },
         ),
         GoRoute(
-          path: 'profile',
+          path: AppRoutes.profile, // Replaced with constant
           builder: (BuildContext context, GoRouterState state) {
             return ProfileScreen();
           },
         ),
         GoRoute(
-          path: 'detail',
+          path: AppRoutes.detail, // Replaced with constant
           builder: (BuildContext context, GoRouterState state) {
             final Map<String, dynamic> transaction =
                 state.extra as Map<String, dynamic>;
@@ -82,7 +83,7 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
-          path: 'register',
+          path: AppRoutes.register, // Replaced with constant
           builder: (BuildContext context, GoRouterState state) {
             return RegistrationScreen();
           },
@@ -107,7 +108,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         brightness: Brightness.dark,
       ),
-      themeMode: ThemeMode.system, // Use system theme by default
+      themeMode: ThemeMode.system,
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

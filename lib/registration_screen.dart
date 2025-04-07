@@ -1,6 +1,7 @@
+import 'package:fintrack/app_routes.dart';
+
 import 'auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -59,17 +60,19 @@ class RegistrationScreen extends StatelessWidget {
               SizedBox(height: 32.0),
               ElevatedButton(
                 onPressed: () async {
+                  final scaffoldMessenger = ScaffoldMessenger.of(context);
+                  final navigator = Navigator.of(context);
+
                   String email = emailController.text;
                   String password = passwordController.text;
                   try {
                     User? user = await _authService
                         .registerWithEmailAndPassword(email, password);
                     if (user != null) {
-                      context.go('/login');
+                      navigator.pushReplacementNamed(AppRoutes.login);
                     }
                   } catch (e) {
-                    // Show error message
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    scaffoldMessenger.showSnackBar(
                       SnackBar(content: Text(e.toString())),
                     );
                   }

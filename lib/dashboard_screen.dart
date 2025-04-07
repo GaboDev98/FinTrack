@@ -1,13 +1,15 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:fintrack/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fintrack/user_summary_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  // ignore: use_super_parameters
+  const DashboardScreen({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -20,28 +22,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final DateFormat dateFormat = DateFormat('dd-MM-yyyy hh:mm a');
 
   Future<bool> _onWillPop() async {
-    return (await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.logout),
-            content: Text(AppLocalizations.of(context)!.logout_confirmation),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(AppLocalizations.of(context)!.no),
-              ),
-              TextButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.of(context).pop(true);
-                  context.go('/login');
-                },
-                child: Text(AppLocalizations.of(context)!.yes),
-              ),
-            ],
-          ),
-        )) ??
-        false;
+  final localization = AppLocalizations.of(context);
+
+  return (await showDialog(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(localization!.logout),
+          content: Text(localization.logout_confirmation),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(localization.no),
+            ),
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop(true);
+                // ignore: use_build_context_synchronously
+                context.replace(AppRoutes.login);
+              },
+              child: Text(localization.yes),
+            ),
+          ],
+        ),
+      )) ??
+      false;
   }
 
   @override
@@ -52,10 +58,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         if (didPop) {
           return;
         }
-        final navigator = Navigator.of(context);
         bool value = await _onWillPop();
         if (value) {
-          navigator.pop(result);
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pop(result);
         }
       },
       child: Scaffold(
@@ -65,7 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             alignment: Alignment.centerLeft,
             child: Text(
               AppLocalizations.of(context)!.financial_summary,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -79,32 +85,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               child: Text(
                 AppLocalizations.of(context)!.menu,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                 ),
               ),
             ),
             ListTile(
-              leading: Icon(Icons.person),
+              leading: const Icon(Icons.person),
               title: Text(AppLocalizations.of(context)!.profile),
               onTap: () {
-                context.go('/profile');
+                context.go(AppRoutes.profile);
               },
             ),
             ListTile(
-              leading: Icon(Icons.list),
+              leading: const Icon(Icons.list),
               title: Text(AppLocalizations.of(context)!.transactions),
               onTap: () {
-                context.go('/transactions');
+                context.go(AppRoutes.transactions); // Updated navigation
               },
             ),
             ListTile(
-              leading: Icon(Icons.logout),
+              leading: const Icon(Icons.logout),
               title: Text(AppLocalizations.of(context)!.logout),
               onTap: () async {
                 await FirebaseAuth.instance.signOut();
-                context.go('/login');
+                // ignore: use_build_context_synchronously
+                context.replace(AppRoutes.login);
               },
             ),
           ]),
@@ -126,7 +133,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       child: Column(
                         children: <Widget>[
                           ListTile(
-                            leading: Icon(Icons.account_balance_wallet,
+                            leading: const Icon(Icons.account_balance_wallet,
                                 color: Colors.blueAccent),
                             title: Text(
                                 AppLocalizations.of(context)!.total_balance),
@@ -139,18 +146,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ),
                           ),
-                          Divider(),
+                          const Divider(),
                           ListTile(
-                            leading:
-                                Icon(Icons.arrow_upward, color: Colors.green),
+                            leading: const Icon(Icons.arrow_upward,
+                                color: Colors.green),
                             title: Text(AppLocalizations.of(context)!.income),
-                            subtitle: Text(
-                                currencyFormat.format(userSummary.totalIncome)),
+                            subtitle: Text(currencyFormat
+                                .format(userSummary.totalIncome)),
                           ),
-                          Divider(),
+                          const Divider(),
                           ListTile(
-                            leading:
-                                Icon(Icons.arrow_downward, color: Colors.red),
+                            leading: const Icon(Icons.arrow_downward,
+                                color: Colors.red),
                             title: Text(AppLocalizations.of(context)!.expenses),
                             subtitle: Text(currencyFormat
                                 .format(userSummary.totalExpenses)),
@@ -159,22 +166,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   Text(
                     AppLocalizations.of(context)!.recent_transactions,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   userSummary.transactions.isEmpty
                       ? Center(
                           child: Text(AppLocalizations.of(context)!
                               .no_recent_transactions))
                       : ListView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: userSummary.transactions.length,
                           itemBuilder: (context, index) {
                             final transaction = userSummary.transactions[index];
@@ -197,7 +204,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               subtitle: Text(dateFormat.format(date)),
                               trailing: Text(currencyFormat.format(amount)),
                               onTap: () {
-                                context.go('/detail', extra: {
+                                context.go(AppRoutes.detail, extra: {
                                   'amount': currencyFormat.format(amount),
                                   'date': dateFormat.format(date),
                                   'description': transaction['description'],
@@ -207,13 +214,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             );
                           },
                         ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 20.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          context.go('/transactions');
+                          context.go(AppRoutes.transactions);
                         },
                         child: Text(AppLocalizations.of(context)!
                             .view_all_transactions),
@@ -227,12 +234,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            context.go('/entry');
+            context.go(AppRoutes.entry);
           },
           backgroundColor: Theme.of(context).primaryColor,
-          child: Icon(
+          child: const Icon(
             Icons.add,
-            color: Theme.of(context).cardColor,
+            color: Colors.white,
           ),
         ),
       ),
