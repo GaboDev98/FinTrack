@@ -41,7 +41,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_APP_DISTRIBUTION_CREDENTIAL_FILE_CONTENT }}
         run: |
           dart pub global activate flutterfire_cli
-          flutterfire configure --yes
+          flutterfire configure --project fintrack-943a7 --yes
 
       - name: Install iOs dependencies
         run: |
